@@ -20,10 +20,10 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.create_table(
-        'user_stats',
+        'user_subs',
         sa.Column('id', sa.BigInteger(), nullable=False, primary_key=True, autoincrement=True),
-        sa.Column('subs', sa.JSON, nullable=True),
-        sa.Column('articles', sa.JSON(), nullable=True),
+        sa.Column('user_id', sa.BigInteger(), nullable=False),
+        sa.Column('sub_id', sa.BigInteger(), nullable=True),
     )
     op.create_table(
         'user_publics',
@@ -35,16 +35,8 @@ def upgrade() -> None:
         sa.Column('likes', sa.Integer(), default=0),
         sa.Column('viewed', sa.Integer(), default=0),
     )
-    op.create_foreign_key(
-        'fk_user_publics_user_stats_id',
-        'user_publics',
-        'user_stats',
-        ['user_id'],
-        ['id'],
-        ondelete='CASCADE'
-    )
 
 
 def downgrade() -> None:
-    op.drop_table('user_stats')
+    op.drop_table('user_subs')
     op.drop_table('user_publics')
